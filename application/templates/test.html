@@ -1,0 +1,124 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BSqE4vH3tIEPPEDAQHCEvclRwn6VjoDt"></script>
+	<style type="text/css">
+		body, html, #allmap{
+		width: 80%;
+		height: 80%;
+		/* overflow: hidden; */
+		margin:0;
+		font-family:"微软雅黑";
+		}
+	</style>
+	<title>map_drone</title>
+    <meta charset="UTF-8">  
+    <title></title>  
+    <style>  
+        #main{  
+            width: 1500px;  
+            height: 500px;  
+            border:unset; 
+            display:flex;  
+            display: -webkit-flex; 
+            zoom: 0;
+            overflow:auto; 
+        }  
+        #one{  
+            -webkit-flex: 1;  
+            flex: 1;  
+            height: 90%;  
+            /* background-color: yellow;   */
+        }  
+        #two{  
+            height: 10%;  
+            -webkit-flex: 1;  
+            flex: 1;  
+            /* background-color: yellow;   */
+        }  
+        
+        /* #three{  
+            height: 50%;  
+            -webkit-flex: 1;  
+            flex: 1;  
+            background-color: green;  
+        }  
+        
+        #four{  
+            height: 50%;  
+            -webkit-flex: 1;  
+            flex: 1;  
+            background-color: green;  
+        }   */
+
+    </style>  
+</head>  
+<body>  
+<div id="main">  
+    <div id="one">  
+            <OBJECT 
+            classid="clsid:DF2BBE39-40A8-433B-A279-073F48DA94B6"
+            id="vlc"    
+            codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"    
+            width="800"
+            height="600"
+            id="vlc"
+            events="True" >
+            <param name="ShowDisplay" value="False" />    
+            <param name="AutoLoop" value="False" />    
+            <param name="AutoPlay" value="False" />    
+            <param name="Time" value="True" />    
+            <EMBED 
+                src="test.mp4"
+                width="100%"
+                height="100%"
+                loop="true"
+                autostart="true"
+                toolbar = "no"
+                branding = "no"
+                type="application/x-vlc-plugin"
+                pluginspage="http://www.videolan.org"
+                version="VideoLAN.VLCPlugin.2" >
+            </EMBED>    
+        </OBJECT> 
+    </div>  
+    <div id="two">  
+            <!-- <h2>无人机操控</h2> -->
+            <a href="https://github.com/ustcxiexk/Poker/tree/master/Code/Game" target="_blank">
+                <img alt="Codes" src="../static/image/operations.png" width="500/"/>
+            </a>  
+    </div> 
+
+    <div>
+    <center>
+            <h1>无人机飞行状态</h1>
+        </center>
+                
+                <table border="1" width = "60%">
+                    <tr>
+                        <td width="30%"> 飞行位置</td>
+                        <td width="70%"> 通过GPS获得</td>
+                    </tr>
+                    <tr>
+                        <td>飞行高度</td>
+                        <td>无人机返回参数</td>
+                    </tr>
+                    <tr>
+                        <td>飞行状态</td>
+                        <td>无人机返回参数</td>
+                    </tr>
+                    <tr>
+                        <td>飞行时长</td>
+                        <td>无人机返回参数</td>
+                    </tr>
+                    <tr>
+                        <td>……</td>
+                        <td>无人机返回参数</td>
+                    </tr>
+                    </table>
+    
+    </div>  
+</body>  
+</html>  

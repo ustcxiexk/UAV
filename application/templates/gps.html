@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=BSqE4vH3tIEPPEDAQHCEvclRwn6VjoDt"></script>
+	<style type="text/css">
+		body, html, #allmap{
+		width: 80%;
+		height: 80%;
+		/* overflow: hidden; */
+		margin:0;
+		font-family:"微软雅黑";
+		}
+	</style>
+	<title>map_drone</title>
+</head>
+<body>
+		<OBJECT 
+		classid="clsid:DF2BBE39-40A8-433B-A279-073F48DA94B6"
+		id="vlc"    
+		codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"    
+		width="800"
+		height="600"
+		id="vlc"
+		events="True" >
+		<param name="ShowDisplay" value="False" />    
+		<param name="AutoLoop" value="False" />    
+		<param name="AutoPlay" value="False" />    
+		<param name="Time" value="True" />    
+		<EMBED 
+			src="test.mp4"
+			width="100%"
+			height="100%"
+			loop="true"
+			autostart="true"
+			toolbar = "no"
+			branding = "no"
+			type="application/x-vlc-plugin"
+			pluginspage="http://www.videolan.org"
+			version="VideoLAN.VLCPlugin.2" >
+		</EMBED>    
+		</OBJECT>
+	<div id="allmap"></div>
+
+	<h2>无人机操控</h2>
+	<a href="https://github.com/ustcxiexk/Poker/tree/master/Code/Game" target="_blank">
+		<img alt="Codes" src="../static/image/operations.png" width="500/"/>
+	</a>
+
+	<center>
+		<h1>无人机飞行状态</h1>
+	</center>
+			
+			<table border="1" width = "60%">
+				<tr>
+					<td width="30%"> 飞行位置</td>
+					<td width="70%"> 通过GPS获得</td>
+				</tr>
+				<tr>
+					<td>飞行高度</td>
+					<td>无人机返回参数</td>
+				</tr>
+				<tr>
+					<td>飞行状态</td>
+					<td>无人机返回参数</td>
+				</tr>
+				<tr>
+					<td>飞行时长</td>
+					<td>无人机返回参数</td>
+				</tr>
+				<tr>
+					<td>……</td>
+					<td>无人机返回参数</td>
+				</tr>
+				</table>
+			
+</body>
+</html>
+<script type="text/javascript">
+	
+	//数据准备,  
+	var points = [];//原始点信息数组  
+	var bPoints = [];//百度化坐标数组。用于更新显示范围
+	
+	//创建标注点并添加到地图中
+	function addMarker(points) {
+		//循环建立标注点
+		for(var i=0, pointsLen = points.length; i<pointsLen; i++) {
+			var point = new BMap.Point(points[i].lng, points[i].lat); //将标注点转化成地图上的点
+			var marker = new BMap.Marker(point); //将点转化成标注点
+			map.addOverlay(marker);  //将标注点添加到地图上
+			//添加监听事件
+			(function() {
+				var thePoint = points[i];
+				marker.addEventListener("click",
+					function() {
+					showInfo(this,thePoint);
+				});
+			 })();  
+		}
+	}
+
+	//添加线  
+	function addLine(points){  
+
+		var linePoints = [],pointsLen = points.length,i,polyline;  
+		if(pointsLen == 0){  
+			return;  
+		}  
+		// 创建标注对象并添加到地图     
+		for(i = 0;i <pointsLen;i++){  
+			linePoints.push(new BMap.Point(points[i].lng,points[i].lat));  
+		}  
+
+		polyline = new BMap.Polyline(linePoints, {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});   //创建折线  
+		map.addOverlay(polyline);   //增加折线  
+	}
+
+	//随机生成新的点，加入到轨迹中。  
+	function dynamicLine(){
+		var b = new BMap.Point(117.262424, 31.843408);
+		var lng = b.lng + getRandom(100)*0.00001 - 0.0005;  
+		var lat = b.lat + getRandom(200)*0.000001 - 0.00005;  
+		var id = getRandom(1000);  
+		var point = {"lng":lng,"lat":lat,"status":1,"id":id}  
+		//var makerPoints = [];  
+		var newLinePoints = [];  
+		var len;  
+
+		//makerPoints.push(point);              
+		//addMarker(makerPoints);//增加对应该的轨迹点  
+		points.push(point);  
+		bPoints.push(new BMap.Point(lng,lat));  
+		len = points.length;  
+		newLinePoints = points.slice(len-2, len);//最后两个点用来画线。  
+
+		addLine(newLinePoints);//增加轨迹线  
+		setZoom(bPoints);
+		//setTimeout(getRandom(10), 1000);
+		//dynamicLine();
+		setTimeout(dynamicLine, 1000);
+		
+	}  
+
+	// 获取随机数  
+	function getRandom(n){  
+		return Math.floor(Math.random()*n+1)  
+	}  
+
+	//根据点信息实时更新地图显示范围，让轨迹完整显示。设置新的中心点和显示级别  
+	function setZoom(bPoints){  
+		var view = map.getViewport(eval(bPoints));  
+		var mapZoom = view.zoom;   
+		var centerPoint = view.center;   
+		map.centerAndZoom(centerPoint,mapZoom);  
+	}  
+
+	//创建地图
+	var map = new BMap.Map("allmap");    
+
+	map.centerAndZoom(new BMap.Point(117.262424, 31.843408), 19);  // 设置中心点
+	map.centerAndZoom( "合肥");
+	map.setCurrentCity("合肥");          //设置为合肥
+	map.addControl(new BMap.MapTypeControl()); //可拖拽  
+	map.enableScrollWheelZoom(true);  //滚轮实现方法缩小 
+	dynamicLine();
+
+</script>
+
+<script language="javascript">
+	window.onload = function (){
+	self.resizeTo(500,500);
+	self.moveTo(200,200);
+	}
+</script>
